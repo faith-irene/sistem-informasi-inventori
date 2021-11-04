@@ -381,11 +381,11 @@ class Pegawai extends CI_Controller {
     public function laporan_barang_in()
     {
         $data['title'] = "Halaman | Laporan";
-        $query = "SELECT id_tranc, tgl_masuk, supplier , 
-                    GROUP_CONCAT(jenis) as j_brg, GROUP_CONCAT(kode_barang) as kd_brg,
-                    GROUP_CONCAT(nama_barang) as nm_brg, GROUP_CONCAT(merk_barang) as mr_brg, 
-                    GROUP_CONCAT(jumlah) as jml FROM tbl_receiving GROUP BY id_tranc order by id_tranc";
-        $data['result'] = $this->db->query($query)->result_array();
+        // $query = "SELECT id_tranc, tgl_masuk, supplier , 
+        //             GROUP_CONCAT(jenis) as j_brg, GROUP_CONCAT(kode_barang) as kd_brg,
+        //             GROUP_CONCAT(nama_barang) as nm_brg, GROUP_CONCAT(merk_barang) as mr_brg, 
+        //             GROUP_CONCAT(jumlah) as jml FROM tbl_receiving GROUP BY id_tranc order by id_tranc";
+        // $data['result'] = $this->db->query($query)->result_array();
         $this->load->view('templates/header', $data);
         $this->load->view('pegawai/laporan_masuk', $data);
         $this->load->view('templates/footer', $data);
