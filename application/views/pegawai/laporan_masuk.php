@@ -42,9 +42,9 @@
 
                                         <input type="date" value="" name="tanggal2" id="tanggal2" class="form-control ml-2 mr-2 form-control-sm">
                                         <input type="submit" id="cari-data-in" name="cari" class="mx-2 btn custom-btn-1 btn-sm right" value="Cari">
-                                        <input type="reset" class="btn custom-btn-2 btn-sm" value="Batal">
-                                        <button type="button" class="btn btn-primary btn-sm ml-5" name="" id=""><span class="fa fa-print"></span> Print</button>
-                                        <a href="<?= base_url('pegawai/proses_laporan') ?>">KLIK</a>
+                                        <input type="reset" class="btn custom-btn-2 btn-sm" name="batal" id="batal" value="Batal">
+                                        <button type="button" class="btn btn-primary btn-sm ml-5" name="print" id="print"><span class="fa fa-print"></span> Print</button>
+                                        <a href="<?= base_url('pegawai/laporan_masuk'); ?>">KLIK</a>
                                 </form>
                             </div>
                         </div>
@@ -80,6 +80,9 @@
                         if (isset($_POST['cari'])) {
                                 $start_date = $_POST['tanggal1'];
                                 $end_date = $_POST['tanggal2'];
+                                // var_dump($start_date);
+                                // var_dump($end_date);
+                                
                             if ( !empty($start_date) && !empty($end_date) ) {
                                 $query = "SELECT id_tranc, tgl_masuk, supplier , 
                                         GROUP_CONCAT(jenis) as j_brg, GROUP_CONCAT(kode_barang) as kd_brg,
@@ -233,4 +236,17 @@ endforeach;
 //         }
 //     })
 // });
+
+$(document).ready( function(){
+    
+    //tombol print
+    $("#print").on('click', function(){
+     
+    });
+
+    //tombol batal
+    $("#batal").click( function(){
+
+    })
+})
 </script>
