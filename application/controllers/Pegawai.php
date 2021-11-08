@@ -397,31 +397,31 @@ class Pegawai extends CI_Controller {
         
     }
 
-    public function tabel_fetch()
-    {
-        $tabel = $this->input->post('tabel_name');
-        $cari = $this->input->post('cari');
-        $tanggal_awal = $this->input->post('awal_date_cari');
-        $tanggal_akhir = $this->input->post('akhir_date_cari');
-        $query = "SELECT * from $tabel ";
+    // public function tabel_fetch()
+    // {
+    //     $tabel = $this->input->post('tabel_name');
+    //     $cari = $this->input->post('cari');
+    //     $tanggal_awal = $this->input->post('awal_date_cari');
+    //     $tanggal_akhir = $this->input->post('akhir_date_cari');
+    //     $query = "SELECT * from $tabel ";
 
         
-        if ($cari == 'yes') {
-            $query .= "WHERE tgl_masuk BETWEEN $tanggal_awal AND $tanggal_akhir ";
-        } else {
-            $query .="ORDER BY id ASC";
-        }
-        //lanjutakan ini
-        $result = $this->db->query($query)->result_array();
-        $output = "";
-        foreach ($result as $row) {
+    //     if ($cari == 'yes') {
+    //         $query .= "WHERE tgl_masuk BETWEEN $tanggal_awal AND $tanggal_akhir ";
+    //     } else {
+    //         $query .="ORDER BY id ASC";
+    //     }
+    //     //lanjutakan ini
+    //     $result = $this->db->query($query)->result_array();
+    //     $output = "";
+    //     foreach ($result as $row) {
             
-        }
-    }
+    //     }
+    // }
 
-    public function proses_laporan()
+    public function proses_laporan($awal='',$akhir='')
     {
-        
+       
         $mpdf = new \Mpdf\Mpdf(['tempDir' => 'vendor']);
         $data = $this->load->view('report/v_report_in',[],true);
         $mpdf->WriteHTML($data);
