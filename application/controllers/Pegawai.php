@@ -1,5 +1,6 @@
 <?php
 
+use Mpdf\HTMLParserMode;
 use Mpdf\Mpdf;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
@@ -386,45 +387,70 @@ class Pegawai extends CI_Controller {
         //             GROUP_CONCAT(nama_barang) as nm_brg, GROUP_CONCAT(merk_barang) as mr_brg, 
         //             GROUP_CONCAT(jumlah) as jml FROM tbl_receiving GROUP BY id_tranc order by id_tranc";
         // $data['result'] = $this->db->query($query)->result_array();
-        $this->load->view('templates/header', $data);
+
+        $tgl_awal = $this->input->get('tgl_awal');
+        $tgl_akhir = $this->input->get('tgl_akhir');
+      if (empty($tgl_awal) or empty($tgl_akhir) ) {
+          $hasil = $this->pegawai->get_all();
+          $url_cetak = 'pegawai/cetak_laporan';
+      } else {
+        $hasil = $this->pegawai->get_by_date($tgl_awal,$tgl_akhir);
+        $url_cetak = "pegawai/cetak_laporan?tgl_awal=".$tgl_awal."&tgl_akhir=".$tgl_akhir;
+      }
+       $data['kueri'] = $hasil;
+       $data['url_cetak'] = base_url($url_cetak);
+       $this->load->view('templates/header', $data);
         $this->load->view('pegawai/laporan_masuk', $data);
         $this->load->view('templates/footer', $data);
-
     }
 
     public function laporan_barang_out()
     {
-        
+        $data['title'] = "Halaman | Laporan";
+        $tgl_awal = $this->input->get('tgl_awal');
+        $tgl_akhir = $this->input->get('tgl_akhir');
+        if (empty($tgl_awal) || empty($tgl_akhir)) {
+            $kueri = "SELECT id_tranc, tgl_keluar, GROUP_CONCAT(kode_barang) as kd_brg, GROUP_CONCAT(nama_barang) as nm_brg, GROUP_CONCAT(jumlah) as jml FROM tbl_issuing GROUP BY id_tranc order by id_tranc ";
+            $hasil = $this->db->query($kueri)->result_array();
+            $url_cetak = "pegawai/laporan_out";
+        } else {
+            $kuery = "SELECT id_tranc, tgl_keluar, GROUP_CONCAT(kode_barang) as kd_brg, GROUP_CONCAT(nama_barang) as nm_brg, GROUP_CONCAT(jumlah) as jml FROM tbl_issuing GROUP BY id_tranc order by id_tranc WHERE tgl_keluar BETWEEN '$tgl_awal' AND '$tgl_akhir'";
+            $hasil = $this->db->query($kuery)->result_array();
+            $url_cetak = "pegawai/laporan_out?tgl1=".$tgl_awal."&tgl_akhir=".$tgl_akhir;
+        }
+        $data['query'] = $hasil;
+        $data['print_url'] = base_url($url_cetak);
+        $this->load->view('templates/header', $data);
+        $this->load->view('pegawai/laporan_keluar', $data);
+        $this->load->view('templates/footer', $data);
     }
 
-    // public function tabel_fetch()
-    // {
-    //     $tabel = $this->input->post('tabel_name');
-    //     $cari = $this->input->post('cari');
-    //     $tanggal_awal = $this->input->post('awal_date_cari');
-    //     $tanggal_akhir = $this->input->post('akhir_date_cari');
-    //     $query = "SELECT * from $tabel ";
+    
 
-        
-    //     if ($cari == 'yes') {
-    //         $query .= "WHERE tgl_masuk BETWEEN $tanggal_awal AND $tanggal_akhir ";
-    //     } else {
-    //         $query .="ORDER BY id ASC";
-    //     }
-    //     //lanjutakan ini
-    //     $result = $this->db->query($query)->result_array();
-    //     $output = "";
-    //     foreach ($result as $row) {
-            
-    //     }
-    // }
-
-    public function proses_laporan($awal='',$akhir='')
+    public function cetak_laporan()
     {
-       
+        $tgl_awal = $this->input->get('tgl_awal');
+        $tgl_akhir = $this->input->get('tgl_akhir');
+       if (empty($tgl_awal) || empty($tgl_akhir)) {
+           $hasil = $this->pegawai->get_all();
+           
+       } else {
+           $hasil = $this->pegawai->get_by_date($tgl_awal,$tgl_akhir);
+
+       }
+        $data['kueri'] = $hasil;
         $mpdf = new \Mpdf\Mpdf(['tempDir' => 'vendor']);
-        $data = $this->load->view('report/v_report_in',[],true);
-        $mpdf->WriteHTML($data);
+        $html = $this->load->view('report/v_report_in',$data,true);
+        // $stylesheet = file_get_contents(base_url('assets/css/cetak.css'));
+        $mpdf->SetHTMLHeader('<table class="page_header">
+        <tr>
+        <td style="text-align: left; width: 10%">SICUMIL</td>
+        <td style="text-align: center; width: 80%">LAPORAN PENJUALAN CUCI MOBIL KESELURUHAN</td>
+        <td style="text-align: right; width: 10%"></td>
+        </tr>
+        </table>');
+        // $mpdf->WriteHTML($stylesheet,HTMLParserMode::HEADER_CSS);
+        $mpdf->WriteHTML($html);
         $mpdf->Output();
     }
 

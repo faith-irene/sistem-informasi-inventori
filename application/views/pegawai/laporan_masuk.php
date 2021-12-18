@@ -13,14 +13,14 @@
                                         border-radius: 5px;
                                         padding: 5px;
                                         margin: 2px;
-                                        background-color: #D5F5E3 ;
+                                        background-color: #A9CCE3 ;
                                         }
                                     .custom-btn-1 {
                                        width: 100px;
-                                       background-color: #82E0AA; 
+                                       background-color: #58D68D  ; 
                                     }
                                     .custom-btn-1:hover {
-                                        background-color: #58D68D;
+                                        background-color:#16A085 ;
                                     }
 
                                     .custom-btn-2 {
@@ -29,22 +29,27 @@
                                     }
 
                                     .custom-btn-2:hover {
-                                        background-color: #F5B7B1 ;
+                                        background-color: #CB4335  ;
                                     }
                             </style>
                             <div class="box d-flex align-content-center flex-wrap">
-                                <form action="" method="post" class="form-inline " id="cari-report-in">
+                                <form action="<?= base_url('pegawai/laporan_barang_in') ?>" method="get" class="form-inline " id="cari-report-in">
                                         <label class="small ml-2" for="">Tanggal masuk</label>
 
-                                        <input type="date" value="" name="tanggal1" id="tanggal1" class="ml-2 mr-2 form-control form-control-sm">
+                                        <input type="date" value="<?= @$_GET['tgl_awal'] ?>" name="tgl_awal" id="tanggal1" class="ml-2 mr-2 form-control form-control-sm">
 
                                         <label class="small" for="">Tanggal keluar</label>
 
-                                        <input type="date" value="" name="tanggal2" id="tanggal2" class="form-control ml-2 mr-2 form-control-sm">
+                                        <input type="date"  value="<?= @$_GET['tgl_akhir'] ?>" name="tgl_akhir" id="tanggal2" class="form-control ml-2 mr-2 form-control-sm">
                                         <input type="submit" id="cari-data-in" name="cari" class="mx-2 btn custom-btn-1 btn-sm right" value="Cari">
-                                        <input type="reset" class="btn custom-btn-2 btn-sm" name="batal" id="batal" value="Batal">
+                                        <input type="button" value="Batal" class="btn btn-sm custom-btn-2">
+                                        <?php 
+                                    if (isset($_GET['cari'])) {
+                                        echo "<a href='".base_url('report_in') ."' class='btn btn-sm custom-btn-2' name='batal' id='batal' value='batal' ></a>";
+                                    }
+                                    ?>   
                                         <button type="button" class="btn btn-primary btn-sm ml-5" name="print" id="print"><span class="fa fa-print"></span> Print</button>
-                                        <a href="<?= base_url('pegawai/laporan_masuk'); ?>">KLIK</a>
+                                        <a href="<?= $url_cetak; ?>" target="_blank">KLIK</a>
                                 </form>
                             </div>
                         </div>
@@ -74,40 +79,30 @@
                                                 // $hasil = array_map(function($a,$b,$c,$d,$e){
                                                 //     return array_combine(['jenis','kode_barang','nama_barang','merk_barang','jumlah'],[$a,$b,$c,$d,$e]);
                                                 // },$jenis,$kode,$nama,$merk,$jumlah);
+                                        //         $query = "SELECT id_tranc, tgl_masuk, supplier , 
+                                        // GROUP_CONCAT(jenis) as j_brg, GROUP_CONCAT(kode_barang) as kd_brg,
+                                        // GROUP_CONCAT(nama_barang) as nm_brg, GROUP_CONCAT(merk_barang) as mr_brg, GROUP_CONCAT(jumlah) as jml FROM tbl_receiving WHERE tgl_masuk BETWEEN  '$start_date'  AND '$end_date' GROUP BY id_tranc order by tgl_masuk";
                                     ?>
                                     <!-- batas -->
-                                    <?php 
-                        if (isset($_POST['cari'])) {
-                                $start_date = $_POST['tanggal1'];
-                                $end_date = $_POST['tanggal2'];
-                                // var_dump($start_date);
-                                // var_dump($end_date);
-                                
-                            if ( !empty($start_date) && !empty($end_date) ) {
-                                $query = "SELECT id_tranc, tgl_masuk, supplier , 
-                                        GROUP_CONCAT(jenis) as j_brg, GROUP_CONCAT(kode_barang) as kd_brg,
-                                        GROUP_CONCAT(nama_barang) as nm_brg, GROUP_CONCAT(merk_barang) as mr_brg, GROUP_CONCAT(jumlah) as jml FROM tbl_receiving WHERE tgl_masuk BETWEEN  '$start_date'  AND '$end_date' GROUP BY id_tranc order by tgl_masuk";
-                                $result = $this->db->query($query);
-                                if ($result->num_rows() == 0) {
-                                   echo "<tr>
-                                   <td> DATA NOT FOUND</td>
-                                   </tr>";
-                                }   else {
-                                    foreach ($result->result_array() as $row) :
-                                        $tanggal = date('d F Y', strtotime($row['tgl_masuk']));
-                                        ?>
-                                            <tr>
+                                     <?php
+                                     if (empty($kueri)) {
+                                        echo "<tr><td>Tidak ada Data</td></tr>";
+                                     } else {
+                                         foreach ($kueri as $row) :
+                                             $tgl = date('d F Y', strtotime($row['tgl_masuk']));
+                                             ?>
+                                             <tr>
                                                 <td><?= $row['id_tranc']; ?></td>
-                                                <td><?= $tanggal; ?></td>
+                                                <td><?= $tgl; ?></td>
                                                 <td><?= $row['supplier']; ?></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                         <?php
-                                                $jenis = explode(',',$row['j_brg']);
+                                                <td colspan="5"></td>
+                                                <td style="display: none;"></td>
+                                                <td style="display: none;"></td>
+                                                <td style="display: none;"></td>
+                                                <td style="display: none;"></td>
+                                             </tr>
+                                             <?php
+                                              $jenis = explode(',',$row['j_brg']);
                                                 $kode = explode(',',$row['kd_brg']);
                                                 $nama = explode(',',$row['nm_brg']);
                                                 $merk = explode(',',$row['mr_brg']);
@@ -115,76 +110,24 @@
                                                 $hasil = array_map(function($a,$b,$c,$d,$e){
                                                     return array_combine(['jenis','kode_barang','nama_barang','merk_barang','jumlah'],[$a,$b,$c,$d,$e]);
                                                 },$jenis,$kode,$nama,$merk,$jumlah);
-                                                foreach ($hasil as $key ) {
-                                                    ?> 
+                                            foreach ($hasil as $key) {
+                                                ?>
                                                 <tr>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td><?= $key['kode_barang']; ?></td>
-                                                    <td><?= $key['nama_barang']; ?></td>
-                                                    <td><?= $key['jenis']; ?></td>
-                                                    <td><?= $key['merk_barang']; ?></td>
-                                                    <td><?= $key['jumlah']; ?></td>
+                                                    <td colspan="3"></td>
+                                                    <td style="display: none;"></td>
+                                                    <td style="display: none;"></td>
+                                                    <td><?= $key['kode_barang'] ?></td>
+                                                    <td><?= $key['nama_barang'] ?></td>
+                                                    <td><?= $key['jenis'] ?></td>
+                                                    <td><?= $key['merk_barang'] ?></td>
+                                                    <td><?= $key['jumlah'] ?></td>
                                                 </tr>
-                                                    <?php
-                                                }
-                                    endforeach;
-                                }  
-                            } else {
-                                ?>
-                                <script>
-                                    alert("masukan tanggal dengan benar");
-                                </script>
-                                <?php 
-                            }
-                        } else {
-                            
-                            $query = "SELECT id_tranc, tgl_masuk, supplier , 
-                                        GROUP_CONCAT(jenis) as j_brg, GROUP_CONCAT(kode_barang) as kd_brg,
-                                        GROUP_CONCAT(nama_barang) as nm_brg, GROUP_CONCAT(merk_barang) as mr_brg, GROUP_CONCAT(jumlah) as jml FROM tbl_receiving GROUP BY id_tranc order by id_tranc";
-$result = $this->db->query($query);
-foreach ($result->result_array() as $row) :
-    $tanggal = date('d F Y', strtotime($row['tgl_masuk']));
-    ?>
-        <tr>
-            <td><?= $row['id_tranc']; ?></td>
-            <td><?= $tanggal; ?></td>
-            <td><?= $row['supplier']; ?></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-     <?php
-            $jenis = explode(',',$row['j_brg']);
-            $kode = explode(',',$row['kd_brg']);
-            $nama = explode(',',$row['nm_brg']);
-            $merk = explode(',',$row['mr_brg']);
-            $jumlah = explode(',',$row['jml']);
-            $hasil = array_map(function($a,$b,$c,$d,$e){
-                return array_combine(['jenis','kode_barang','nama_barang','merk_barang','jumlah'],[$a,$b,$c,$d,$e]);
-            },$jenis,$kode,$nama,$merk,$jumlah);
-            foreach ($hasil as $key ) {
-                ?> 
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><?= $key['kode_barang']; ?></td>
-                <td><?= $key['nama_barang']; ?></td>
-                <td><?= $key['jenis']; ?></td>
-                <td><?= $key['merk_barang']; ?></td>
-                <td><?= $key['jumlah']; ?></td>
-            </tr>
-                <?php
-            }
-endforeach;
+                                                <?php
+                                            }
+                                         endforeach;
+                                     }
+                                     ?>
 
-                        }
-                        
-                        ?>     
                                     </tbody>
                                     </table>
                             </div>
@@ -248,5 +191,7 @@ $(document).ready( function(){
     $("#batal").click( function(){
 
     })
+
+    $("#tabel-report-in").DataTable({});
 })
 </script>

@@ -34,6 +34,26 @@ function gen_kode($panjang){
     return 'WOW'.'-'.date('Y').'/'.date('m').'/'.$str;
 }
 
+public function get_all()
+{
+    $query = "SELECT id_tranc, tgl_masuk, supplier , 
+    GROUP_CONCAT(jenis) as j_brg, GROUP_CONCAT(kode_barang) as kd_brg,
+    GROUP_CONCAT(nama_barang) as nm_brg, GROUP_CONCAT(merk_barang) as mr_brg, GROUP_CONCAT(jumlah) as jml FROM tbl_receiving GROUP BY id_tranc order by tgl_masuk";
+    $result = $this->db->query($query)->result_array();
+    return $result;
+}
+
+public function get_by_date($tgl1,$tgl2)
+{
+    // $tgl_awal = $tgl1;
+    // $tgl_akhir = $tgl2;
+    $query = "SELECT id_tranc, tgl_masuk, supplier , 
+    GROUP_CONCAT(jenis) as j_brg, GROUP_CONCAT(kode_barang) as kd_brg,
+    GROUP_CONCAT(nama_barang) as nm_brg, GROUP_CONCAT(merk_barang) as mr_brg, GROUP_CONCAT(jumlah) as jml FROM tbl_receiving WHERE tgl_masuk BETWEEN  '$tgl1'  AND '$tgl2' GROUP BY id_tranc order by tgl_masuk";
+    $result = $this->db->query($query)->result_array();
+    return $result;
+}
+
 
 }
 

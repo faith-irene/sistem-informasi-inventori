@@ -1,0 +1,20 @@
+@media print {
+
+    /*design table 1*/
+.table-report {
+    font-family: sans-serif;
+    color: #232323;
+    border-collapse: collapse;
+}
+ 
+.table-report, th, td {
+    border: 1px solid black;
+    padding: 2px 2px;
+}
+table.page_header {
+    width: 1020px; border: none; background-color: #DDDDFF; border-bottom: solid 1mm #AAAADD; padding: 2mm 
+}
+
+}
+
+
