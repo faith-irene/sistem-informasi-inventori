@@ -28,8 +28,10 @@
   <link rel="stylesheet" href="<?= base_url('assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') ?>">
   <link rel="stylesheet" href="<?= base_url('assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') ?>">
   <link rel="stylesheet" href="<?= base_url('assets/jdcb/css/dataTables.checkboxes.css') ?>">
+  <!-- <link rel="stylesheet" href="<?= base_url('assets/tabulator/css/tabulator.css') ?>"> -->
   <!-- jQuery -->
 <script src="<?= base_url('assets/js/') ?>jquery.js"></script>
+<!-- <script src="<?= base_url('assets/footable/') ?>footable.js"></script> -->
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">

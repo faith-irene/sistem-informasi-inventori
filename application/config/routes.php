@@ -61,5 +61,8 @@ $route['data_barang'] = "pegawai/data_barang";
 $route['receiving'] = "pegawai/receiving";
 $route['issue'] = "pegawai/issue";
 $route['report_in'] = "pegawai/laporan_barang_in";
+$route['report_in/(:any)/(:any)'] = "pegawai/laporan_barang_in/$1/$2";
+$route['report_print_in'] = "pegawai/cetak_laporan/";
+$route['report_print_in/(:any)'] = "pegawai/cetak_laporan/$1/$2";
 $route['report_out'] = "pegawai/laporan_barang_out";
 

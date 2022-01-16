@@ -425,7 +425,17 @@ class Pegawai extends CI_Controller {
         $this->load->view('templates/footer', $data);
     }
 
-    
+    public function view_ri(){
+        $date1 = $this->input->post('date1');
+        $date2 = $this->input->post('date2');
+        if (empty($date1) || empty($date2)) {
+            $hasil = $this->pegawai->get_all();
+            echo json_encode($hasil);
+        } else {
+            $hasil = $this->pegawai->get_by_date($date1,$date2);
+            echo json_encode($hasil);
+        }
+    }
 
     public function cetak_laporan()
     {

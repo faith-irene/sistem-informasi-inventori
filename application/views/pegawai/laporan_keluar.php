@@ -45,7 +45,7 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table">
+                                <table id="tabel-keluar" class="table">
                                 <thead>
                                         <tr>
                                             <td>ID Transaksi</td>
@@ -103,3 +103,19 @@
         </div>
     </section>
 </div>
+
+<script>
+$(document).ready( function(){
+   
+    tampil_data();
+    function tampil_data(){
+        $.ajax({
+        url: "<?= base_url('pegawai/laporan_barang_out') ?>",
+        dataType: "JSON",
+        success: function(data){
+            console.log(data);
+        }
+    });
+    }
+});
+</script>
